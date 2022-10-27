@@ -32,13 +32,14 @@ class Student(Human):
 #  Реалізуйте методи додавання, видалення студента та метод пошуку студента за прізвищем.
 #  Визначте для Групи метод str() для повернення списку студентів у вигляді рядка.
 class Group:
-    def __init__(self, name: str):
+    def __init__(self, name: str, max_students: int=10):
         self.name = name
         self.students = []
+        self.max_students = max_students
 
     def add_student(self, student: Student) -> str:
         """Added new student to group"""
-        if len(self.students) >= 10:
+        if len(self.students) >= self.max_students:
             return "Sorry, cannot add student, group is full"
         elif isinstance(student, Student):
             if student not in self.students:
