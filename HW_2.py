@@ -1,6 +1,17 @@
-# Домашнє завдання 2:
+# Домашнє завдання 2, 3:
+# todo 3.2. Модифікуйте Друге домашнє завдання так, щоб при спробі додавання до групи більше 10-ти студентів,
+#  викликалася виняткова ситуація (тип виняткової ситуації треба самостійно реалізувати).
+#  Подію додавання нового студента до групи необхідно фіксувати у лог-файлі.
 
-# todo 1. Створіть клас, що описує людину (створіть метод, що виводить інформацію про людину).
+class User_Exception(Exception):
+    def __init__(self, text):
+        super(User_Exception, self).__init__()
+        self.message = text
+
+    def get_exception_message(self):
+            return self.message
+
+# todo 2.1. Створіть клас, що описує людину (створіть метод, що виводить інформацію про людину).
 class Human:
     def __init__(self, inn: str, full_name: str, date_of_birth: str):
         self.inn = inn
@@ -14,7 +25,7 @@ class Human:
         return f"INN: {self.inn}\nFull name: {self.full_name}\nDate of birth: {self.date_of_birth}"
 
 
-# todo 2) На його основі створіть клас Студент (перевизначте метод виведення інформації).
+# todo 2.2) На його основі створіть клас Студент (перевизначте метод виведення інформації).
 class Student(Human):
     def __init__(self, inn: str, full_name: str, date_of_birth: str, start_data: str):
         super().__init__(inn=inn, full_name=full_name, date_of_birth=date_of_birth)
@@ -28,25 +39,28 @@ class Student(Human):
         return super().print_data() + f"\nDate of admission to university: {self.date_of_admission_to_university}"
 
 
-# todo 3) Створіть клас Група, який містить масив із 10 об'єктів класу Студент.
+# todo 2.3) Створіть клас Група, який містить масив із 10 об'єктів класу Студент.
 #  Реалізуйте методи додавання, видалення студента та метод пошуку студента за прізвищем.
 #  Визначте для Групи метод str() для повернення списку студентів у вигляді рядка.
 class Group:
-    def __init__(self, name: str, max_students: int=10):
+    def __init__(self, name: str):
         self.name = name
         self.students = []
-        self.max_students = max_students
 
     def add_student(self, student: Student) -> str:
         """Added new student to group"""
-        if len(self.students) >= self.max_students:
-            return "Sorry, cannot add student, group is full"
-        elif isinstance(student, Student):
-            if student not in self.students:
-                self.students.append(student)
-                return f"Student {student} - added"
-            else:
-                return "This student already in group"
+        try:
+            if len(self.students) >= 10:
+                raise User_Exception(f"Sorry, cannot add student {student}, group is full")
+        except User_Exception as err:
+            print(err.get_exception_message())
+        else:
+            if isinstance(student, Student):
+                if student not in self.students:
+                    self.students.append(student)
+                    return f"Student {student} - added"
+                else:
+                    return "This student already in group"
 
     def remove_student(self, student: Student) -> str:
         """Remove a student from group"""
@@ -75,14 +89,32 @@ students.append(Student(inn="123456789", full_name="Bondarenko Ivan",
                     date_of_birth='26.11.1982', start_data='15.09.2022'))
 students.append(Student(inn="123456788", full_name="Bondarenko Anatoly",
                     date_of_birth='10.01.1985', start_data='15.09.2022'))
-students.append(Student(inn="123456787", full_name="Ivanov Ivan",
+students.append(Student(inn="123456787", full_name="Ivanov1 Ivan",
+                    date_of_birth='01.01.1999', start_data='15.09.2022'))
+students.append(Student(inn="123456787", full_name="Ivanov2 Ivan",
+                    date_of_birth='01.01.1999', start_data='15.09.2022'))
+students.append(Student(inn="123456787", full_name="Ivanov3 Ivan",
+                    date_of_birth='01.01.1999', start_data='15.09.2022'))
+students.append(Student(inn="123456787", full_name="Ivanov4 Ivan",
+                    date_of_birth='01.01.1999', start_data='15.09.2022'))
+students.append(Student(inn="123456787", full_name="Ivanov5 Ivan",
+                    date_of_birth='01.01.1999', start_data='15.09.2022'))
+students.append(Student(inn="123456787", full_name="Ivanov6 Ivan",
+                    date_of_birth='01.01.1999', start_data='15.09.2022'))
+students.append(Student(inn="123456787", full_name="Ivanov7 Ivan",
+                    date_of_birth='01.01.1999', start_data='15.09.2022'))
+students.append(Student(inn="123456787", full_name="Ivanov8 Ivan",
+                    date_of_birth='01.01.1999', start_data='15.09.2022'))
+students.append(Student(inn="123456787", full_name="Ivanov9 Ivan",
+                    date_of_birth='01.01.1999', start_data='15.09.2022'))
+students.append(Student(inn="123456787", full_name="Ivanov10 Ivan",
                     date_of_birth='01.01.1999', start_data='15.09.2022'))
 
 group = Group("Python PRO")
 for i in range(len(students)):
-    print(group.add_student(students[i]))
+    group.add_student(students[i])
 
 # print(group.remove_student(students[2]))
-print(students[0].print_all_data())
+# print(students[0].print_all_data())
 print(group.find_student("Bondarenko"))
 print(str(group))
