@@ -3,23 +3,28 @@ from student import Student
 
 
 class Group:
-    def __init__(self, name: str):
+    def __init__(self, name: str, logger, students_limit=10):
         self.name = name
+        self.logger = logger
+        self.students_limit = students_limit
         self.students = []
+
 
     def add_student(self, student: Student) -> str:
         """Added new student to group"""
-        if len(self.students) >= 10:
+        if len(self.students) >= self.students_limit:
+            self.logger.add_warning(f'{student}: Limit')
             raise User_Exception(f"Sorry, cannot add student {student}, group is full")
         else:
             if isinstance(student, Student):
                 if student not in self.students:
                     self.students.append(student)
-                    # need to LOG
-                    # return f"Student {student} - added"
+                    self.logger.add_info(f'{student}: Added')
                 else:
+                    self.logger.add_warning(f'{student}: Duplicat of student')
                     raise User_Exception("This student already in group")
             else:
+                self.logger.add_warning(f'{student}: Wrong datatype with student')
                 raise TypeError
 
     def remove_student(self, student: Student) -> str:

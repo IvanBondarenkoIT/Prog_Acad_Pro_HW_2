@@ -1,6 +1,7 @@
 # Домашнє завдання 2, 3:
 from group import Group
 from student import Student
+import my_logger as logger
 # todo 3.2. Модифікуйте Друге домашнє завдання так, щоб при спробі додавання до групи більше 10-ти студентів,
 #  викликалася виняткова ситуація (тип виняткової ситуації треба самостійно реалізувати).
 #  Подію додавання нового студента до групи необхідно фіксувати у лог-файлі.
@@ -9,6 +10,8 @@ from student import Student
 # todo 2.3) Створіть клас Група, який містить масив із 10 об'єктів класу Студент.
 #  Реалізуйте методи додавання, видалення студента та метод пошуку студента за прізвищем.
 #  Визначте для Групи метод str() для повернення списку студентів у вигляді рядка.
+
+
 
 
 students = []
@@ -37,11 +40,12 @@ students.append(Student(inn="123456787", full_name="Ivanov9 Ivan",
 students.append(Student(inn="123456787", full_name="Ivanov10 Ivan",
                         date_of_birth='01.01.1999', start_data='15.09.2022'))
 
-group = Group("Python PRO")
+group = Group(name="Python PRO", logger=logger.My_loger(__name__), students_limit=4)
 for i in range(len(students)):
-    group.add_student(students[i])
+    try:
+        group.add_student(students[i])
+    except Exception as exc:
+        print(exc)
 
-# print(group.remove_student(students[2]))
-# print(students[0].print_all_data())
 print(group.find_student("Bondarenko"))
 print(str(group))
