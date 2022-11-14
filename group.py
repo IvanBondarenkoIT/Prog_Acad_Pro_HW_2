@@ -46,10 +46,9 @@ class Group:
         """Remove a student from group"""
         if student in self.students:
             self.students.remove(student)
-            # need to LOG
-            # return f"Student {student} - removed"
-        #else:
-            # return "Student not in group"
+            self.logger.add_warning(f"Student {student} - removed")
+        else:
+            raise User_Exception(f"Student {student} not in group")
 
     def find_student(self, lastname: str) -> list:
         """Find students with giving last name"""
