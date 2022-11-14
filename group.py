@@ -2,13 +2,28 @@ from exception import User_Exception
 from student import Student
 
 
+class GroupIterator:
+    def __init__(self, wrapped):
+        self.wrapped = wrapped
+        self.index = 0
+
+    def __next__(self):
+        if self.index < len(self.wrapped):
+            self.index = self.index + 1
+            return self.wrapped[self.index - 1]
+        else:
+            raise StopIteration
+
+    def __iter__(self):
+        return self
+
+
 class Group:
     def __init__(self, name: str, logger, students_limit=10):
         self.name = name
         self.logger = logger
         self.students_limit = students_limit
         self.students = []
-
 
     def add_student(self, student: Student) -> str:
         """Added new student to group"""
@@ -44,7 +59,11 @@ class Group:
             if __ln[0].lower() == lastname.lower():
                 __list.append(str(student))
         return __list
+
     def __str__(self):
         __result = f"Group:{self.name}\n"
         __result += "".join([str(student)+'\n' for student in self.students])
         return __result
+
+    def __iter__(self):
+        return GroupIterator(self.students)
